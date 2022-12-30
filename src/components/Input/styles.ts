@@ -2,7 +2,7 @@ import styled, { css } from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { TextInput } from "react-native";
 
-export const Container = styled(TextInput)`
+export const Component = styled(TextInput)`
   flex: 1;
   padding: ${RFValue(16)}px;
 
