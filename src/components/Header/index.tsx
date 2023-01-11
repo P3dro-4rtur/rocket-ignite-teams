@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 
 import appLogo from "@assets/logo.png";
@@ -10,11 +11,16 @@ interface Props {
 
 export function Header({ backButton = false }: Props) {
   const theme = useTheme();
+  const navigation = useNavigation();
+
+  function handleGoBack() {
+    navigation.navigate("Groups");
+  }
 
   const BackButton = () => {
     if (backButton) {
       return (
-        <Button>
+        <Button onPress={handleGoBack}>
           <ArrowLeft />
         </Button>
       );

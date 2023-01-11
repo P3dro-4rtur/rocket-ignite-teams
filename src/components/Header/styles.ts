@@ -14,7 +14,6 @@ export const Container = styled.View<ContainerProps>`
     haveBackButton ? "space-between" : "center"};
 
   width: 100%;
-  margin-top: ${RFValue(50)}px;
 `;
 
 export const Button = styled.TouchableOpacity``;
