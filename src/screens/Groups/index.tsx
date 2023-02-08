@@ -1,28 +1,22 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
+import { emptyListMessage } from "~/utils/emptyMessage";
+import { groupsGetAll } from "~/storage/group/groupsGetAll";
+
+import { Loader } from "~/components/Loader";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
 import { GroupCard } from "~/components/GroupCard";
 import { ListEmpty } from "~/components/ListEmpty";
 import { Button } from "~/components/Button";
-import { Container, GroupList } from "./styles";
-import { groupsGetALl } from "~/storage/group/groupsGetAll";
 
-const emptyListMessage = { message: "Que tal cadastrar a primeira turma?" };
+import { Container, GroupList } from "./styles";
 
 export function Groups() {
+  const [isLoading, setLoading] = useState(true);
   const [groups, setGroups] = useState<string[]>([]);
   const navigation = useNavigation();
-
-  const ListProps = {
-    data: groups,
-    key: (item: string) => item,
-    render: ({ item }: { item: string }) => {
-      return GroupCard({ title: item, onPress: undefined });
-    },
-    contentStyle: groups.length === 0 && { flex: 1 },
-    emptyList: ListEmpty(emptyListMessage),
-  };
 
   function handleNavigateNewGroup() {
     navigation.navigate("NewGroup");
@@ -30,12 +24,24 @@ export function Groups() {
 
   async function fetchGroups() {
     try {
-      const data = await groupsGetALl();
+      setLoading(true);
+      const data = await groupsGetAll();
       setGroups(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   }
+
+  function handleOpenGroup(group: string) {
+    navigation.navigate("Players", { group });
+  }
+
+  const renderItemGroup = {
+    fn(item: string) {
+      return <GroupCard title={item} onPress={() => handleOpenGroup(item)} />;
+    },
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -48,13 +54,17 @@ export function Groups() {
       <Header />
       <Highlight title="Turma" subtitle="Jogue com a sua turma" />
 
-      <GroupList
-        data={ListProps.data}
-        keyExtractor={ListProps.key}
-        renderItem={ListProps.render}
-        contentContainerStyle={ListProps.contentStyle}
-        ListEmptyComponent={ListProps.emptyList}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <GroupList
+          data={groups}
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => renderItemGroup.fn(item)}
+          contentContainerStyle={groups.length === 0 && { flex: 1 }}
+          ListEmptyComponent={ListEmpty(emptyListMessage)}
+        />
+      )}
 
       <Button title="Criar nova turma" onPress={handleNavigateNewGroup} />
     </Container>

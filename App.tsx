@@ -1,11 +1,8 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-
 import { Routes } from "~/routes";
-
 import theme from "@theme/index";
 import { ThemeProvider } from "styled-components/native";
-
 import { Loader } from "@components/Loader";
 import {
   useFonts,
