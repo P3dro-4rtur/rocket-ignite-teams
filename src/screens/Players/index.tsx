@@ -43,13 +43,14 @@ export function Players() {
         team
       );
       setPlayers(playersByTeam);
-      setLoading(false);
     } catch (error) {
       console.log(error);
       Alert.alert(
         "Jogadores",
         "Não foi possível carregar as pessoas do time selecionado"
       );
+    } finally {
+      setLoading(false);
     }
   }
 

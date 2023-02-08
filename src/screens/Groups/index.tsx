@@ -27,9 +27,10 @@ export function Groups() {
       setLoading(true);
       const data = await groupsGetAll();
       setGroups(data);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
